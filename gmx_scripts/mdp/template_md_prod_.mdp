@@ -1,0 +1,55 @@
+; RUN CONTROL PARAMETERS
+integrator               = md
+tinit                    = 0       		; Starting time
+dt                       = 0.002   		; 2 fs time step for integration
+nsteps                   = 25000000     ; 50 ns production
+ld-seed					 = 200908012003 ; a random number
+
+; OUTPUT CONTROL OPTIONS
+nstxout                  = 50000  ; Writing full precision coordinates every 100 ps
+nstvout                  = 50000  ; Writing velocities every 100 ps
+nstlog                   = 5000   ; Writing to the log file every 10ps
+nstenergy                = 5000   ; Writing out energy information every 10ps
+nstxout-compressed       = 5000   ; Writing coordinates using lossy compression every 10ps
+compressed-x-grps		 = System ; Write to the compressed trajectory file for the whole system
+energygrps               = Protein Non-Protein
+
+; NEIGHBORSEARCHING PARAMETER
+cutoff-scheme            = Verlet
+nstlist                  = 10
+ns-type                  = Grid
+pbc                      = xyz
+rlist                    = 1.2
+
+; OPTIONS FOR ELECTROSTATICS AND VDW
+coulombtype              = PME
+pme_order                = 4            ; cubic interpolation
+fourierspacing           = 0.16         ; grid spacing for FFT
+rcoulomb                 = 1.2
+vdw-type                 = Cut-off
+rvdw                     = 1.2
+
+; Temperature coupling
+Tcoupl                   = v-rescale
+tc-grps                  = Protein  Non-Protein
+tau_t                    = 0.1      0.1
+ref_t                    = 300      300
+
+; Pressure coupling
+Pcoupl                   = Berendsen
+Pcoupltype               = Isotropic
+tau_p                    = 1.0
+compressibility          = 4.5e-5
+ref_p                    = 1.0
+
+; GENERATE VELOCITIES FOR STARTUP RUN
+gen_vel                  = no
+
+; OPTIONS FOR BONDS
+constraints              = all-bonds
+constraint-algorithm     = lincs
+continuation             = yes          ; Restarting after NPT without position restraints
+lincs-order              = 4
+lincs-iter               = 1
+lincs-warnangle          = 30
+~
